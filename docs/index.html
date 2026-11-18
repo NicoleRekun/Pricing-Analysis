@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Win-Rate Pricing Optimizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a pricing analyst's worksheet. Summary row, product explorer with two linked charts, segment curves, then the full recommendation table. */
+:root{
+  color-scheme:light;
+  --surface:#fcfcfb; --panel:#ffffff; --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#7a7974; --line:#e4e3df; --grid:#efeeea;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --zone:#f0efec;
+  --demo-bg:#fff4d6; --demo-line:#e0a800; --demo-ink:#5c4300;
+  --body:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme:dark;
+    --surface:#1a1a19; --panel:#222220; --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#939288; --line:#383835; --grid:#2c2c2a;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --zone:#2a2a28;
+    --demo-bg:#3a2f10; --demo-line:#c99a1a; --demo-ink:#f3dc9a;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --surface:#1a1a19; --panel:#222220; --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#939288; --line:#383835; --grid:#2c2c2a;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --zone:#2a2a28;
+  --demo-bg:#3a2f10; --demo-line:#c99a1a; --demo-ink:#f3dc9a;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--surface);color:var(--ink);font:15px/1.55 var(--body)}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 20px 64px;display:flex;flex-direction:column;gap:22px}
+:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.demo{background:var(--demo-bg);border:1px solid var(--demo-line);color:var(--demo-ink);border-radius:8px;padding:10px 14px;font-weight:500}
+.demo b{font-weight:600}
+h1{font-size:28px;line-height:1.15;margin:0;text-wrap:balance;font-weight:600}
+h2{font-size:18px;margin:0;font-weight:600;text-wrap:balance}
+.sub{color:var(--ink-2);margin:4px 0 0;max-width:75ch}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.tile .k{font-size:13px;color:var(--ink-2)}
+.tile .v{font:500 24px var(--mono);font-variant-numeric:tabular-nums;margin-top:2px}
+.tile .d{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
+.controls label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink-2)}
+select,input[type=range]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-width:170px}
+input[type=range]{padding:0;min-width:220px;accent-color:var(--s1)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13.5px;color:var(--ink-2)}
+.facts b{color:var(--ink);font:500 14px var(--mono);font-variant-numeric:tabular-nums}
+.charts{display:grid;grid-template-columns:1fr;gap:4px;position:relative}
+.ctitle{font-size:13px;color:var(--ink-2);margin:6px 0 0}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--ink-2);font:12px var(--body)}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.12);display:none;min-width:150px;z-index:2}
+.tip .r{display:flex;justify-content:space-between;gap:14px;font-variant-numeric:tabular-nums}
+.tip .r span:last-child{font-family:var(--mono)}
+.readout{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px}
+.readout b{font:500 15px var(--mono);font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.legend i.dot{width:10px;height:10px;border-radius:50%}
+.legend i.dash{height:0;border-top:2px dashed var(--ink-3);background:none}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th{font-weight:600;color:var(--ink-2);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--panel)}
+th:first-child,td:first-child,th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3){text-align:left}
+td.num{font-family:var(--mono)}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--zone)}
+tbody tr.sel{outline:2px solid var(--s1);outline-offset:-2px}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;border:1px solid var(--line);font-size:12px;color:var(--ink-2)}
+.up{color:var(--ink)} .muted{color:var(--ink-3)}
+.method{color:var(--ink-2);font-size:14px;max-width:80ch;display:flex;flex-direction:column;gap:8px}
+.method code{font-family:var(--mono);font-size:13px}
+@media (max-width:600px){h1{font-size:23px} select{min-width:140px}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo" role="note"><b>DEMO DATA ONLY.</b> The company (Maple Grid Electrical Supply), products, costs, competitor prices and the 4,000-quote history are all fictional, generated from a random seed.</div>
+
+  <header>
+    <h1>Win-Rate Pricing Optimizer</h1>
+    <p class="sub">Recommends a quote price for each product and customer segment by combining internal costs and margin floors, competitor prices, and how often past quotes at each price level were won.</p>
+  </header>
+
+  <section class="tiles" id="tiles" aria-label="Summary"></section>
+
+  <section class="panel" aria-labelledby="ex-h">
+    <h2 id="ex-h">Product explorer</h2>
+    <div class="controls">
+      <label for="selSku">Product<select id="selSku"></select></label>
+      <label for="selSeg">Customer segment<select id="selSeg"></select></label>
+      <label for="tryPrice">Try a price: <span id="tryVal"></span><input type="range" id="tryPrice" step="0.01"></label>
+    </div>
+    <div class="facts" id="facts"></div>
+    <div class="readout" id="readout" aria-live="polite"></div>
+    <div class="legend">
+      <span><i style="background:var(--s1)"></i>Model curve</span>
+      <span><i class="dot" style="background:var(--ink-3)"></i>Current average quote</span>
+      <span><i class="dot" style="background:var(--s1)"></i>Recommended price</span>
+      <span><i class="dash"></i>Floor, lowest competitor, cap, list</span>
+      <span><i style="background:var(--zone);height:10px;width:14px"></i>Not allowed by guardrails</span>
+    </div>
+    <div class="charts" id="charts">
+      <div><p class="ctitle">Chance of winning the quote (%)</p><svg id="cWin" viewBox="0 0 900 200" role="img" aria-label="Win probability by price"></svg></div>
+      <div><p class="ctitle">Expected gross profit per quote (CAD)</p><svg id="cProfit" viewBox="0 0 900 220" role="img" aria-label="Expected profit by price"></svg></div>
+      <div class="tip" id="tip"></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="seg-h">
+    <h2 id="seg-h">How price-sensitive each segment is</h2>
+    <p class="sub" style="margin:0">Fitted win rate against price relative to the lowest competitor (1.00 = matching them). Resellers walk away fastest when undercut; industrial buyers tolerate a premium.</p>
+    <div class="legend" id="segLegend"></div>
+    <div class="charts" id="segWrap"><svg id="cSeg" viewBox="0 0 900 260" role="img" aria-label="Win rate by price index per segment"></svg><div class="tip" id="tip2"></div></div>
+  </section>
+
+  <section class="panel" aria-labelledby="tb-h">
+    <h2 id="tb-h">All recommendations</h2>
+    <div class="controls">
+      <label for="fSeg">Segment<select id="fSeg"></select></label>
+      <label for="fCls">Product class<select id="fCls"></select></label>
+      <label for="fBind">Binding guardrail<select id="fBind"></select></label>
+    </div>
+    <div class="tablewrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+    <p class="muted" style="margin:0;font-size:13px">Click a row to open it in the explorer. Click a column heading to sort.</p>
+  </section>
+
+  <section class="panel method" aria-labelledby="m-h">
+    <h2 id="m-h" style="color:var(--ink)">Method</h2>
+    <p><b>1. Win-rate model.</b> For each segment, a logistic regression on the quote history: <code>logit P(win) = a + b × (price ÷ lowest competitor − 1)</code>, fitted by maximum likelihood.</p>
+    <p><b>2. Objective.</b> Expected gross profit per quote = <code>P(win) × (price − unit cost)</code>. A higher price earns more per win but wins less often; the optimum balances the two.</p>
+    <p><b>3. Guardrails from internal policy.</b> Never below the product class's margin floor, never above list price, and never more than <span id="capTxt"></span>× the lowest competitor price. When the floor sits above the competitor cap, the floor wins.</p>
+    <p><b>4. Before using it for real:</b> validate on a hold-out period, run it beside analysts in shadow mode, and refresh competitor prices and model fits monthly.</p>
+  </section>
+  <p class="muted" style="font-size:13px;margin:0">Demo data only. Built by Nicole Rekun.</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  var D = window.PRICING_DATA, rows = D.rows, M = D.models;
+  var SEGS = Object.keys(M), SEGCOL = {}; SEGS.forEach(function(s,i){SEGCOL[s]="var(--s"+(i+1)+")";});
+  var $ = function(id){return document.getElementById(id);};
+  var fmt$ = function(v){return v.toLocaleString("en-CA",{style:"currency",currency:"CAD",maximumFractionDigits:2});};
+  var fmt0 = function(v){return v.toLocaleString("en-CA",{style:"currency",currency:"CAD",maximumFractionDigits:0});};
+  var pct = function(v,d){return (v*100).toFixed(d==null?1:d)+"%";};
+  var esc = function(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
+  function pwin(seg, idx){var m=M[seg]; return 1/(1+Math.exp(-(m.a+m.b*(idx-1))));}
+  $("capTxt").textContent = D.cap_index.toFixed(2);
+
+  // tiles
+  var S = D.summary;
+  var be = SEGS.map(function(s){return s+" "+(1-M[s].a/M[s].b).toFixed(2)+"×";}).join("<br>");
+  $("tiles").innerHTML =
+    tile("Gross profit, demo year", fmt0(S.recommended_gross_profit), "from "+fmt0(S.current_gross_profit)+" ("+(S.uplift_pct>0?"+":"")+S.uplift_pct+"%)")+
+    tile("Quote win rate", pct(S.recommended_win_rate), "from "+pct(S.current_win_rate)+": fewer, more profitable wins")+
+    tile("Prices set", String(S.pairs), "product × segment pairs")+
+    tile("50% win point vs competitor", "", be);
+  function tile(k,v,d){return '<div class="tile"><div class="k">'+k+'</div>'+(v?'<div class="v">'+v+'</div>':'')+'<div class="d"'+(v?'':' style="font:500 14px var(--mono);color:var(--ink);margin-top:6px"')+'>'+d+'</div></div>';}
+
+  // selectors
+  var skus = []; rows.forEach(function(r){ if(skus.indexOf(r.sku)<0) skus.push(r.sku); });
+  var desc = {}; rows.forEach(function(r){desc[r.sku]=r.description;});
+  $("selSku").innerHTML = skus.map(function(s){return '<option value="'+s+'">'+s+' · '+esc(desc[s])+'</option>';}).join("");
+  $("selSeg").innerHTML = SEGS.map(function(s){return '<option>'+s+'</option>';}).join("");
+  var cur = rows.slice().sort(function(a,b){return (b.recommended_profit_per_quote-b.current_profit_per_quote)*b.quotes_per_year-(a.recommended_profit_per_quote-a.current_profit_per_quote)*a.quotes_per_year;})[0];
+  $("selSku").value = cur.sku; $("selSeg").value = cur.segment;
+
+  function rowFor(sku, seg){ for(var i=0;i<rows.length;i++) if(rows[i].sku===sku&&rows[i].segment===seg) return rows[i]; return null; }
+  function anyRow(sku){ for(var i=0;i<rows.length;i++) if(rows[i].sku===sku) return rows[i]; }
+
+  // explorer charts
+  var W=900, L=58, R=16, T=10;
+  var state = {r:null, x0:0, x1:1, tryP:0};
+  function sx(p){return L+(p-state.x0)/(state.x1-state.x0)*(W-L-R);}
+  function px(X){return state.x0+(X-L)/(W-L-R)*(state.x1-state.x0);}
+
+  function draw(){
+    var sku=$("selSku").value, seg=$("selSeg").value, r=rowFor(sku,seg), base=r||anyRow(sku);
+    state.r = r;
+    var lc=base.lowest_competitor_price, cost=base.unit_cost;
+    var cap=Math.min(base.list_price, D.cap_index*lc);
+    state.x0 = Math.min(base.floor_price, lc*0.85, base.current_avg_price||1e9)*0.97;
+    state.x1 = Math.max(base.list_price, lc*D.cap_index)*1.03;
+    var tr=$("tryPrice"); tr.min=state.x0.toFixed(2); tr.max=state.x1.toFixed(2);
+    if(!state.tryP || state.tryP<state.x0 || state.tryP>state.x1 || draw.lastKey!==sku+seg){ state.tryP = r?r.recommended_price:lc; tr.value=state.tryP; }
+    draw.lastKey = sku+seg;
+
+    $("facts").innerHTML = [
+      ["Unit cost",fmt$(cost)],["Margin floor price",fmt$(base.floor_price)],["Lowest competitor",fmt$(lc)],
+      ["Competitor cap",fmt$(D.cap_index*lc)],["List",fmt$(base.list_price)],["Quotes/yr",r?r.quotes_per_year:"0"],
+      ["Guardrail",r?'<span class="pill">'+esc(r.binding_constraint)+'</span>':"n/a"]
+    ].map(function(f){return '<span>'+f[0]+' <b>'+f[1]+'</b></span>';}).join("");
+
+    var N=160, pts=[];
+    for(var i=0;i<=N;i++){var p=state.x0+(state.x1-state.x0)*i/N, w=pwin(seg,p/lc); pts.push([p,w,w*(p-cost)]);}
+    var maxP = Math.max.apply(null, pts.map(function(q){return q[2];}).concat([r?r.current_profit_per_quote:0]))*1.12;
+    var minP = Math.min(0, Math.min.apply(null, pts.map(function(q){return q[2];})));
+    var refs=[[base.floor_price,"floor"],[lc,"competitor"],[D.cap_index*lc,"cap"]];
+    if(base.list_price < D.cap_index*lc) refs.push([base.list_price,"list"]);
+    $("cWin").innerHTML = chart(200, 0, 1, pts.map(function(q){return [q[0],q[1]];}), function(v){return Math.round(v*100)+"%";},
+      r?[[r.current_avg_price,r.current_win_rate,"cur"],[r.recommended_price,r.recommended_win_rate,"rec"]]:[], refs, base, [0,.25,.5,.75,1], pwin(seg,state.tryP/lc));
+    var ticks = niceTicks(minP,maxP,4);
+    $("cProfit").innerHTML = chart(220, ticks[0], ticks[ticks.length-1], pts.map(function(q){return [q[0],q[2]];}), function(v){return "$"+Math.round(v);},
+      r?[[r.current_avg_price,r.current_profit_per_quote,"cur"],[r.recommended_price,r.recommended_profit_per_quote,"rec"]]:[], refs, base, ticks, pwin(seg,state.tryP/lc)*(state.tryP-cost), true);
+    readout();
+    markRow();
+  }
+
+  function niceTicks(lo,hi,n){var span=hi-lo, step=Math.pow(10,Math.floor(Math.log10(span/n))), e=span/n/step; step*= e>5?10:e>2?5:e>1?2:1; var a=Math.floor(lo/step)*step, out=[]; for(var v=a; v<=hi+step*0.999; v+=step) out.push(+v.toFixed(6)); return out;}
+
+  function chart(H, y0, y1, line, yfmt, marks, refs, base, yt, tryY, xAxis){
+    var B=H-(xAxis?34:12);
+    var sy=function(v){return T+(1-(v-y0)/(y1-y0))*(B-T);};
+    var s="";
+    // disallowed zones
+    var cap=Math.min(base.list_price, D.cap_index*base.lowest_competitor_price);
+    s+='<rect x="'+L+'" y="'+T+'" width="'+Math.max(0,sx(base.floor_price)-L)+'" height="'+(B-T)+'" fill="var(--zone)"/>';
+    s+='<rect x="'+sx(cap)+'" y="'+T+'" width="'+Math.max(0,W-R-sx(cap))+'" height="'+(B-T)+'" fill="var(--zone)"/>';
+    yt.forEach(function(v){ s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+sy(v)+'" y2="'+sy(v)+'" stroke="var(--grid)"/><text x="'+(L-8)+'" y="'+(sy(v)+4)+'" text-anchor="end">'+yfmt(v)+'</text>'; });
+    if(y0<0) s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+sy(0)+'" y2="'+sy(0)+'" stroke="var(--ink-3)"/>';
+    refs.forEach(function(f){ var X=sx(f[0]); s+='<line x1="'+X+'" x2="'+X+'" y1="'+T+'" y2="'+B+'" stroke="var(--ink-3)" stroke-dasharray="4 4"/>'; if(!xAxis) s+='<text x="'+(X+4)+'" y="'+(T+12)+'">'+f[1]+'</text>'; });
+    s+='<path d="'+line.map(function(q,i){return (i?"L":"M")+sx(q[0]).toFixed(1)+" "+sy(q[1]).toFixed(1);}).join("")+'" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round"/>';
+    // try-price marker
+    var TX=sx(state.tryP); s+='<line x1="'+TX+'" x2="'+TX+'" y1="'+T+'" y2="'+B+'" stroke="var(--ink)" stroke-width="1"/><circle cx="'+TX+'" cy="'+sy(tryY)+'" r="5" fill="var(--panel)" stroke="var(--ink)" stroke-width="2"/>';
+    marks.forEach(function(m){ s+='<circle cx="'+sx(m[0])+'" cy="'+sy(m[1])+'" r="6" fill="'+(m[2]==="rec"?"var(--s1)":"var(--ink-3)")+'" stroke="var(--panel)" stroke-width="2"/>'; });
+    if(xAxis){ niceTicks(state.x0,state.x1,7).forEach(function(v){ if(v<state.x0||v>state.x1) return; var X=sx(v); s+='<line x1="'+X+'" x2="'+X+'" y1="'+B+'" y2="'+(B+4)+'" stroke="var(--ink-3)"/><text x="'+X+'" y="'+(B+18)+'" text-anchor="middle">$'+v+'</text>'; }); s+='<text x="'+(W-R)+'" y="'+(H-2)+'" text-anchor="end">Quoted price (CAD)</text>'; }
+    s+='<rect class="hit" x="'+L+'" y="0" width="'+(W-L-R)+'" height="'+H+'" fill="transparent"/>';
+    return s;
+  }
+
+  function readout(){
+    var seg=$("selSeg").value, r=state.r, base=r||anyRow($("selSku").value), lc=base.lowest_competitor_price, p=state.tryP, w=pwin(seg,p/lc), cost=base.unit_cost;
+    $("tryVal").textContent = fmt$(p);
+    var allowed = p>=base.floor_price-1e-6 && p<=Math.min(base.list_price,D.cap_index*lc)+1e-6;
+    var html = '<span>At '+fmt$(p)+': win <b>'+pct(w)+'</b></span><span>margin <b>'+pct((p-cost)/p)+'</b></span><span>expected profit/quote <b>'+fmt$(w*(p-cost))+'</b></span>';
+    if(!allowed) html += '<span class="pill">outside guardrails</span>';
+    if(r) html += '<span class="muted">Recommended '+fmt$(r.recommended_price)+' · win '+pct(r.recommended_win_rate)+' · '+fmt$(r.recommended_profit_per_quote)+'/quote (now '+fmt$(r.current_profit_per_quote)+')</span>';
+    $("readout").innerHTML = html;
+  }
+
+  // hover across both explorer charts
+  var tip=$("tip"), charts=$("charts");
+  ["cWin","cProfit"].forEach(function(id){
+    var el=$(id);
+    el.addEventListener("mousemove",function(e){
+      var rect=el.getBoundingClientRect(), X=(e.clientX-rect.left)/rect.width*W; if(X<L||X>W-R){tip.style.display="none";return;}
+      var p=px(X), seg=$("selSeg").value, base=state.r||anyRow($("selSku").value), w=pwin(seg,p/base.lowest_competitor_price);
+      tip.innerHTML='<div class="r"><span>Price</span><span>'+fmt$(p)+'</span></div><div class="r"><span>Win</span><span>'+pct(w)+'</span></div><div class="r"><span>Margin</span><span>'+pct((p-base.unit_cost)/p)+'</span></div><div class="r"><span>Profit/quote</span><span>'+fmt$(w*(p-base.unit_cost))+'</span></div>';
+      var cr=charts.getBoundingClientRect(); tip.style.display="block";
+      var left=e.clientX-cr.left+14; if(left+170>cr.width) left=e.clientX-cr.left-180;
+      tip.style.left=left+"px"; tip.style.top=(e.clientY-cr.top+10)+"px";
+    });
+    el.addEventListener("mouseleave",function(){tip.style.display="none";});
+    el.addEventListener("click",function(e){var rect=el.getBoundingClientRect(), X=(e.clientX-rect.left)/rect.width*W; if(X>=L&&X<=W-R){state.tryP=px(X); $("tryPrice").value=state.tryP; draw();}});
+  });
+  $("tryPrice").addEventListener("input",function(){state.tryP=+this.value; draw();});
+  $("selSku").addEventListener("change",draw); $("selSeg").addEventListener("change",draw);
+
+  // segment curves
+  function segChart(){
+    var H=260,B=H-34,x0=0.85,x1=1.30, X=function(v){return L+(v-x0)/(x1-x0)*(W-L-R);}, Y=function(v){return T+(1-v)*(B-T);};
+    var s="";
+    [0,.25,.5,.75,1].forEach(function(v){s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="var(--grid)"/><text x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+(v*100)+'%</text>';});
+    [0.85,0.9,0.95,1,1.05,1.1,1.15,1.2,1.25,1.3].forEach(function(v){s+='<text x="'+X(v)+'" y="'+(B+18)+'" text-anchor="middle">'+v.toFixed(2)+'×</text>';});
+    s+='<line x1="'+X(1)+'" x2="'+X(1)+'" y1="'+T+'" y2="'+B+'" stroke="var(--ink-3)" stroke-dasharray="4 4"/>';
+    s+='<text x="'+(W-R)+'" y="'+(H-2)+'" text-anchor="end">Price ÷ lowest competitor</text>';
+    SEGS.forEach(function(seg){
+      var d=""; for(var i=0;i<=90;i++){var v=x0+(x1-x0)*i/90; d+=(i?"L":"M")+X(v).toFixed(1)+" "+Y(pwin(seg,v)).toFixed(1);}
+      s+='<path d="'+d+'" fill="none" stroke="'+SEGCOL[seg]+'" stroke-width="2"/>';
+    });
+    // direct labels at x=1.22
+    var lab = SEGS.map(function(seg){return {seg:seg,y:Y(pwin(seg,1.22))};}).sort(function(a,b){return a.y-b.y;});
+    for(var i=1;i<lab.length;i++) if(lab[i].y-lab[i-1].y<14) lab[i].y=lab[i-1].y+14;
+    lab.forEach(function(l){s+='<text x="'+(X(1.22)+6)+'" y="'+(l.y-4)+'" style="fill:var(--ink)">'+l.seg+'</text>';});
+    s+='<rect id="segHit" x="'+L+'" y="0" width="'+(W-L-R)+'" height="'+H+'" fill="transparent"/>';
+    $("cSeg").innerHTML=s;
+    $("segLegend").innerHTML = SEGS.map(function(seg){return '<span><i style="background:'+SEGCOL[seg]+'"></i>'+seg+' ('+M[seg].n.toLocaleString()+' quotes)</span>';}).join("");
+    var el=$("cSeg"), t2=$("tip2"), wrap=$("segWrap");
+    el.addEventListener("mousemove",function(e){var rect=el.getBoundingClientRect(), XX=(e.clientX-rect.left)/rect.width*W; if(XX<L||XX>W-R){t2.style.display="none";return;}
+      var v=x0+(XX-L)/(W-L-R)*(x1-x0);
+      t2.innerHTML='<div class="r"><span>Price index</span><span>'+v.toFixed(2)+'×</span></div>'+SEGS.map(function(seg){return '<div class="r"><span>'+seg+'</span><span>'+pct(pwin(seg,v))+'</span></div>';}).join("");
+      var cr=wrap.getBoundingClientRect(); t2.style.display="block"; var left=e.clientX-cr.left+14; if(left+170>cr.width) left=e.clientX-cr.left-180; t2.style.left=left+"px"; t2.style.top=(e.clientY-cr.top+10)+"px";});
+    el.addEventListener("mouseleave",function(){t2.style.display="none";});
+  }
+
+  // table
+  var COLS=[["sku","SKU"],["description","Product"],["segment","Segment"],["lowest_competitor_price","Competitor low"],["current_avg_price","Current avg"],["recommended_price","Recommended"],["chg","Change"],["current_win_rate","Win now"],["recommended_win_rate","Win rec."],["current_profit_per_quote","Profit/quote now"],["recommended_profit_per_quote","Profit/quote rec."],["quotes_per_year","Quotes/yr"],["binding_constraint","Guardrail"]];
+  rows.forEach(function(r){r.chg=(r.recommended_price/r.current_avg_price-1);});
+  var sortK="recommended_profit_per_quote", sortDir=-1;
+  function opts(id, vals){$(id).innerHTML='<option value="">All</option>'+vals.map(function(v){return '<option>'+esc(v)+'</option>';}).join("");}
+  function uniq(k){var u=[]; rows.forEach(function(r){if(u.indexOf(r[k])<0)u.push(r[k]);}); return u.sort();}
+  opts("fSeg",SEGS); opts("fCls",uniq("item_class")); opts("fBind",uniq("binding_constraint"));
+  ["fSeg","fCls","fBind"].forEach(function(id){$(id).addEventListener("change",table);});
+  function table(){
+    $("tbl").querySelector("thead").innerHTML='<tr>'+COLS.map(function(c){return '<th data-k="'+c[0]+'" scope="col" aria-sort="'+(c[0]===sortK?(sortDir>0?"ascending":"descending"):"none")+'">'+c[1]+(c[0]===sortK?(sortDir>0?" ▲":" ▼"):"")+'</th>';}).join("")+'</tr>';
+    var fs=$("fSeg").value, fc=$("fCls").value, fb=$("fBind").value;
+    var list=rows.filter(function(r){return (!fs||r.segment===fs)&&(!fc||r.item_class===fc)&&(!fb||r.binding_constraint===fb);});
+    list.sort(function(a,b){var x=a[sortK],y=b[sortK]; return (x>y?1:x<y?-1:0)*sortDir;});
+    $("tbl").querySelector("tbody").innerHTML=list.map(function(r){
+      return '<tr data-sku="'+r.sku+'" data-seg="'+r.segment+'" tabindex="0"><td>'+r.sku+'</td><td>'+esc(r.description)+'</td><td>'+r.segment+'</td><td class="num">'+fmt$(r.lowest_competitor_price)+'</td><td class="num">'+fmt$(r.current_avg_price)+'</td><td class="num">'+fmt$(r.recommended_price)+'</td><td class="num">'+(r.chg>0?"+":"")+pct(r.chg)+'</td><td class="num">'+pct(r.current_win_rate,0)+'</td><td class="num">'+pct(r.recommended_win_rate,0)+'</td><td class="num">'+fmt$(r.current_profit_per_quote)+'</td><td class="num">'+fmt$(r.recommended_profit_per_quote)+'</td><td class="num">'+r.quotes_per_year+'</td><td><span class="pill">'+esc(r.binding_constraint)+'</span></td></tr>';
+    }).join("");
+    markRow();
+  }
+  $("tbl").addEventListener("click",function(e){
+    var th=e.target.closest("th"); if(th){var k=th.dataset.k; if(sortK===k) sortDir*=-1; else {sortK=k; sortDir=-1;} table(); return;}
+    var tr=e.target.closest("tbody tr"); if(tr){$("selSku").value=tr.dataset.sku; $("selSeg").value=tr.dataset.seg; draw(); $("ex-h").scrollIntoView({behavior:"smooth",block:"start"});}
+  });
+  $("tbl").addEventListener("keydown",function(e){ if(e.key==="Enter"){var tr=e.target.closest("tbody tr"); if(tr) tr.click();}});
+  function markRow(){ var sku=$("selSku").value, seg=$("selSeg").value; [].forEach.call(document.querySelectorAll("#tbl tbody tr"),function(tr){tr.classList.toggle("sel", tr.dataset.sku===sku&&tr.dataset.seg===seg);}); }
+
+  segChart(); table(); draw();
+})();
+</script>
+</body>
+</html>
