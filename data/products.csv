@@ -1,0 +1,32 @@
+# DEMO DATA ONLY - fictional company, products, prices and quotes
+sku,description,item_class,unit_cost,list_price,margin_floor_pct
+DEMO-2001,Copper building wire 12 AWG 75 m,WIRE,82.88,121.06,12.0
+DEMO-2002,Copper building wire 14 AWG 75 m,WIRE,120.38,179.16,12.0
+DEMO-2003,Armoured cable 12/2 75 m,WIRE,302.99,465.11,12.0
+DEMO-2004,Armoured cable 14/3 75 m,WIRE,261.11,352.76,12.0
+DEMO-2005,Low-voltage cable 18/2 150 m,WIRE,286.66,432.92,12.0
+DEMO-2006,Ground wire 6 AWG 30 m,WIRE,374.55,578.84,12.0
+DEMO-2007,EMT conduit 1/2 in 3 m,CONDUIT,23.72,35.01,15.0
+DEMO-2008,EMT conduit 3/4 in 3 m,CONDUIT,43.72,64.78,15.0
+DEMO-2009,PVC conduit 1 in 3 m,CONDUIT,28.22,40.4,15.0
+DEMO-2010,Flexible conduit 1/2 in 15 m,CONDUIT,32.85,50.26,15.0
+DEMO-2011,Liquid-tight conduit 3/4 in 15 m,CONDUIT,19.23,27.64,15.0
+DEMO-2012,"Conduit strap 1/2 in, box of 100",CONDUIT,6.4,8.85,15.0
+DEMO-2013,Single-pole breaker 15 A,BREAKER,223.97,302.07,18.0
+DEMO-2014,Double-pole breaker 30 A,BREAKER,72.65,113.92,18.0
+DEMO-2015,GFCI breaker 20 A,BREAKER,233.78,373.21,18.0
+DEMO-2016,AFCI breaker 15 A,BREAKER,90.75,140.11,18.0
+DEMO-2017,Load centre 100 A,BREAKER,119.61,167.74,18.0
+DEMO-2018,Surge protective device,BREAKER,157.37,227.92,18.0
+DEMO-2019,LED panel 2x4 ft 40 W,LIGHTING,57.92,84.33,22.0
+DEMO-2020,LED high bay 150 W,LIGHTING,107.04,168.48,22.0
+DEMO-2021,LED wall pack 30 W,LIGHTING,31.23,47.25,22.0
+DEMO-2022,LED strip 5 m 24 V,LIGHTING,174.27,277.23,22.0
+DEMO-2023,LED troffer retrofit kit,LIGHTING,58.97,86.07,22.0
+DEMO-2024,Emergency light unit,LIGHTING,89.15,118.03,22.0
+DEMO-2025,Cordless impact driver kit,TOOLS,52.43,80.86,25.0
+DEMO-2026,Fish tape 30 m,TOOLS,288.22,434.4,25.0
+DEMO-2027,Digital multimeter,TOOLS,187.43,287.79,25.0
+DEMO-2028,Conduit bender 1/2 in,TOOLS,66.41,91.81,25.0
+DEMO-2029,Cable cutter,TOOLS,166.27,223.41,25.0
+DEMO-2030,Voltage tester,TOOLS,277.05,389.44,25.0

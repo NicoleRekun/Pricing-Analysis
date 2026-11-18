@@ -1,0 +1,92 @@
+# DEMO DATA ONLY - fictional company, products, prices and quotes
+sku,description,item_class,segment,unit_cost,list_price,lowest_competitor_price,floor_price,current_avg_price,current_win_rate,current_profit_per_quote,recommended_price,recommended_win_rate,recommended_margin_pct,recommended_profit_per_quote,quotes_per_year,binding_constraint
+DEMO-2001,Copper building wire 12 AWG 75 m,WIRE,Contractor,82.88,121.06,99.83,94.18,109.58,0.3514,8.42,104.73,0.4883,20.86,10.67,37,none (unconstrained optimum)
+DEMO-2001,Copper building wire 12 AWG 75 m,WIRE,Industrial,82.88,121.06,99.83,94.18,109.16,0.625,15.6,114.8,0.5968,27.81,19.05,24,competitor cap
+DEMO-2001,Copper building wire 12 AWG 75 m,WIRE,Reseller,82.88,121.06,99.83,94.18,102.08,0.4706,7.9,97.75,0.5857,15.21,8.71,34,none (unconstrained optimum)
+DEMO-2002,Copper building wire 14 AWG 75 m,WIRE,Contractor,120.38,179.16,166.88,136.8,164.17,0.6897,29.49,166.84,0.597,27.85,27.74,29,none (unconstrained optimum)
+DEMO-2002,Copper building wire 14 AWG 75 m,WIRE,Industrial,120.38,179.16,166.88,136.8,158.61,0.5,17.0,179.16,0.6712,32.81,39.45,10,list price
+DEMO-2002,Copper building wire 14 AWG 75 m,WIRE,Reseller,120.38,179.16,166.88,136.8,152.61,0.875,26.31,157.18,0.7209,23.41,26.53,8,none (unconstrained optimum)
+DEMO-2003,Armoured cable 12/2 75 m,WIRE,Contractor,302.99,465.11,398.87,344.31,415.11,0.3871,39.14,405.09,0.5626,25.2,57.44,31,none (unconstrained optimum)
+DEMO-2003,Armoured cable 12/2 75 m,WIRE,Industrial,302.99,465.11,398.87,344.31,419.92,0.625,71.72,458.7,0.5968,33.95,92.93,24,competitor cap
+DEMO-2003,Armoured cable 12/2 75 m,WIRE,Reseller,302.99,465.11,398.87,344.31,404.51,0.4444,40.03,380.43,0.6806,20.36,52.71,18,none (unconstrained optimum)
+DEMO-2004,Armoured cable 14/3 75 m,WIRE,Contractor,261.11,352.76,320.28,296.72,310.4,0.6121,25.91,333.52,0.5055,21.71,36.6,116,none (unconstrained optimum)
+DEMO-2004,Armoured cable 14/3 75 m,WIRE,Industrial,261.11,352.76,320.28,296.72,314.17,0.7541,39.66,352.76,0.6449,25.98,59.1,61,list price
+DEMO-2004,Armoured cable 14/3 75 m,WIRE,Reseller,261.11,352.76,320.28,296.72,302.17,0.6119,19.82,311.75,0.6082,16.24,30.8,67,none (unconstrained optimum)
+DEMO-2005,Low-voltage cable 18/2 150 m,WIRE,Contractor,286.66,432.92,368.18,325.75,392.98,0.4333,40.72,377.15,0.5433,23.99,49.16,30,none (unconstrained optimum)
+DEMO-2005,Low-voltage cable 18/2 150 m,WIRE,Industrial,286.66,432.92,368.18,325.75,389.36,0.75,78.42,423.41,0.5968,32.3,81.61,28,competitor cap
+DEMO-2005,Low-voltage cable 18/2 150 m,WIRE,Reseller,286.66,432.92,368.18,325.75,365.19,0.6471,45.91,353.41,0.6588,18.89,43.97,17,none (unconstrained optimum)
+DEMO-2006,Ground wire 6 AWG 30 m,WIRE,Contractor,374.55,578.84,473.67,425.62,520.65,0.3621,47.43,487.71,0.5315,23.2,60.15,58,none (unconstrained optimum)
+DEMO-2006,Ground wire 6 AWG 30 m,WIRE,Industrial,374.55,578.84,473.67,425.62,519.1,0.5263,74.9,544.72,0.5968,31.24,101.56,38,competitor cap
+DEMO-2006,Ground wire 6 AWG 30 m,WIRE,Reseller,374.55,578.84,473.67,425.62,502.25,0.2903,29.95,456.67,0.6432,17.98,52.82,31,none (unconstrained optimum)
+DEMO-2007,EMT conduit 1/2 in 3 m,CONDUIT,Contractor,23.72,35.01,30.46,27.91,31.45,0.5957,4.55,31.2,0.5434,23.97,4.06,47,none (unconstrained optimum)
+DEMO-2007,EMT conduit 1/2 in 3 m,CONDUIT,Industrial,23.72,35.01,30.46,27.91,31.76,0.7436,6.1,35.01,0.5974,32.25,6.75,39,list price
+DEMO-2007,EMT conduit 1/2 in 3 m,CONDUIT,Reseller,23.72,35.01,30.46,27.91,30.39,0.4194,2.22,29.24,0.6584,18.88,3.64,31,none (unconstrained optimum)
+DEMO-2008,EMT conduit 3/4 in 3 m,CONDUIT,Contractor,43.72,64.78,52.21,51.44,57.64,0.3469,4.22,54.97,0.4796,20.47,5.4,98,none (unconstrained optimum)
+DEMO-2008,EMT conduit 3/4 in 3 m,CONDUIT,Industrial,43.72,64.78,52.21,51.44,57.64,0.697,9.6,60.04,0.5968,27.18,9.74,66,competitor cap
+DEMO-2008,EMT conduit 3/4 in 3 m,CONDUIT,Reseller,43.72,64.78,52.21,51.44,55.39,0.3256,3.16,51.44,0.5619,15.0,4.34,43,margin floor
+DEMO-2009,PVC conduit 1 in 3 m,CONDUIT,Contractor,28.22,40.4,33.45,33.2,35.57,0.44,3.0,35.33,0.4726,20.11,3.36,25,none (unconstrained optimum)
+DEMO-2009,PVC conduit 1 in 3 m,CONDUIT,Industrial,28.22,40.4,33.45,33.2,35.88,0.8,5.64,38.47,0.5968,26.64,6.12,15,competitor cap
+DEMO-2009,PVC conduit 1 in 3 m,CONDUIT,Reseller,28.22,40.4,33.45,33.2,34.7,0.25,1.15,33.2,0.5324,15.0,2.65,12,margin floor
+DEMO-2010,Flexible conduit 1/2 in 15 m,CONDUIT,Contractor,32.85,50.26,46.13,38.65,45.45,0.7353,8.93,45.95,0.6048,28.51,7.92,68,none (unconstrained optimum)
+DEMO-2010,Flexible conduit 1/2 in 15 m,CONDUIT,Industrial,32.85,50.26,46.13,38.65,44.39,0.8095,9.0,50.26,0.6563,34.64,11.43,42,list price
+DEMO-2010,Flexible conduit 1/2 in 15 m,CONDUIT,Reseller,32.85,50.26,46.13,38.65,43.44,0.6923,6.86,43.33,0.729,24.19,7.64,39,none (unconstrained optimum)
+DEMO-2011,Liquid-tight conduit 3/4 in 15 m,CONDUIT,Contractor,19.23,27.64,25.29,22.62,24.73,0.5962,2.91,25.69,0.562,25.15,3.63,52,none (unconstrained optimum)
+DEMO-2011,Liquid-tight conduit 3/4 in 15 m,CONDUIT,Industrial,19.23,27.64,25.29,22.62,24.29,0.7778,3.69,27.64,0.653,30.43,5.49,36,list price
+DEMO-2011,Liquid-tight conduit 3/4 in 15 m,CONDUIT,Reseller,19.23,27.64,25.29,22.62,23.64,0.7391,3.18,24.12,0.6808,20.27,3.33,23,none (unconstrained optimum)
+DEMO-2012,"Conduit strap 1/2 in, box of 100",CONDUIT,Contractor,6.4,8.85,7.18,7.53,7.92,0.5192,0.7,7.77,0.414,17.67,0.57,52,none (unconstrained optimum)
+DEMO-2012,"Conduit strap 1/2 in, box of 100",CONDUIT,Industrial,6.4,8.85,7.18,7.53,7.81,0.6111,0.86,8.26,0.5968,22.49,1.11,36,competitor cap
+DEMO-2012,"Conduit strap 1/2 in, box of 100",CONDUIT,Reseller,6.4,8.85,7.18,7.53,7.55,0.375,0.27,7.53,0.3147,15.0,0.36,24,margin floor
+DEMO-2013,Single-pole breaker 15 A,BREAKER,Contractor,223.97,302.07,275.73,273.13,270.12,0.68,28.78,286.77,0.5084,21.9,31.93,50,none (unconstrained optimum)
+DEMO-2013,Single-pole breaker 15 A,BREAKER,Industrial,223.97,302.07,275.73,273.13,266.41,0.7647,32.62,302.07,0.6505,25.85,50.81,34,list price
+DEMO-2013,Single-pole breaker 15 A,BREAKER,Reseller,223.97,302.07,275.73,273.13,265.49,0.5517,18.23,273.13,0.5402,18.0,26.56,29,margin floor
+DEMO-2014,Double-pole breaker 30 A,BREAKER,Contractor,72.65,113.92,103.63,88.6,101.01,0.7273,20.22,102.75,0.6146,29.29,18.5,33,none (unconstrained optimum)
+DEMO-2014,Double-pole breaker 30 A,BREAKER,Industrial,72.65,113.92,103.63,88.6,100.6,0.65,18.13,113.92,0.6469,36.23,26.7,20,list price
+DEMO-2014,Double-pole breaker 30 A,BREAKER,Reseller,72.65,113.92,103.63,88.6,99.09,0.65,15.43,97.04,0.7384,25.13,18.01,20,none (unconstrained optimum)
+DEMO-2015,GFCI breaker 20 A,BREAKER,Contractor,233.78,373.21,347.44,285.1,332.07,0.6714,63.75,340.75,0.6371,31.39,68.15,140,none (unconstrained optimum)
+DEMO-2015,GFCI breaker 20 A,BREAKER,Industrial,233.78,373.21,347.44,285.1,324.4,0.7101,62.94,373.21,0.6707,37.36,93.51,69,list price
+DEMO-2015,GFCI breaker 20 A,BREAKER,Reseller,233.78,373.21,347.44,285.1,322.82,0.6528,52.98,322.86,0.7601,27.59,67.71,72,none (unconstrained optimum)
+DEMO-2016,AFCI breaker 15 A,BREAKER,Contractor,90.75,140.11,128.19,110.67,123.81,0.6163,18.85,127.42,0.6094,28.78,22.35,86,none (unconstrained optimum)
+DEMO-2016,AFCI breaker 15 A,BREAKER,Industrial,90.75,140.11,128.19,110.67,126.35,0.7174,23.84,140.11,0.653,35.23,32.23,46,list price
+DEMO-2016,AFCI breaker 15 A,BREAKER,Reseller,90.75,140.11,128.19,110.67,119.79,0.6889,18.0,120.34,0.731,24.59,21.63,45,none (unconstrained optimum)
+DEMO-2017,Load centre 100 A,BREAKER,Contractor,119.61,167.74,135.52,145.87,148.88,0.4124,10.31,146.02,0.4254,18.08,11.23,97,none (unconstrained optimum)
+DEMO-2017,Load centre 100 A,BREAKER,Industrial,119.61,167.74,135.52,145.87,148.47,0.7042,18.44,155.85,0.5968,23.25,21.63,71,competitor cap
+DEMO-2017,Load centre 100 A,BREAKER,Reseller,119.61,167.74,135.52,145.87,144.7,0.3019,6.08,145.87,0.2269,18.0,5.96,53,margin floor
+DEMO-2018,Surge protective device,BREAKER,Contractor,157.37,227.92,209.11,191.91,203.05,0.6667,31.26,211.77,0.5689,25.69,30.95,21,none (unconstrained optimum)
+DEMO-2018,Surge protective device,BREAKER,Industrial,157.37,227.92,209.11,191.91,197.83,0.9091,34.35,227.92,0.6559,30.95,46.27,11,list price
+DEMO-2018,Surge protective device,BREAKER,Reseller,157.37,227.92,209.11,191.91,199.01,0.5385,19.29,198.95,0.6888,20.9,28.64,13,none (unconstrained optimum)
+DEMO-2019,LED panel 2x4 ft 40 W,LIGHTING,Contractor,57.92,84.33,77.81,74.26,75.19,0.6351,10.2,78.52,0.5767,26.24,11.88,74,none (unconstrained optimum)
+DEMO-2019,LED panel 2x4 ft 40 W,LIGHTING,Industrial,57.92,84.33,77.81,74.26,75.18,0.76,13.18,84.33,0.6617,31.32,17.47,50,list price
+DEMO-2019,LED panel 2x4 ft 40 W,LIGHTING,Reseller,57.92,84.33,77.81,74.26,71.27,0.7059,8.79,74.26,0.6786,22.0,11.09,34,margin floor
+DEMO-2020,LED high bay 150 W,LIGHTING,Contractor,107.04,168.48,147.59,137.23,149.26,0.5286,21.12,147.73,0.5945,27.54,24.19,70,none (unconstrained optimum)
+DEMO-2020,LED high bay 150 W,LIGHTING,Industrial,107.04,168.48,147.59,137.23,150.58,0.7308,29.73,168.48,0.6054,36.47,37.19,52,list price
+DEMO-2020,LED high bay 150 W,LIGHTING,Reseller,107.04,168.48,147.59,137.23,143.59,0.7222,24.02,139.19,0.717,23.1,23.05,36,none (unconstrained optimum)
+DEMO-2021,LED wall pack 30 W,LIGHTING,Contractor,31.23,47.25,42.94,40.04,41.0,0.7632,7.01,43.02,0.5925,27.41,6.99,38,none (unconstrained optimum)
+DEMO-2021,LED wall pack 30 W,LIGHTING,Industrial,31.23,47.25,42.94,40.04,42.09,0.65,6.66,47.25,0.6459,33.9,10.35,20,list price
+DEMO-2021,LED wall pack 30 W,LIGHTING,Reseller,31.23,47.25,42.94,40.04,39.99,0.8462,6.99,40.53,0.7146,22.94,6.64,39,none (unconstrained optimum)
+DEMO-2022,LED strip 5 m 24 V,LIGHTING,Contractor,174.27,277.23,226.06,223.42,246.86,0.3146,20.41,230.75,0.5512,24.48,31.13,89,none (unconstrained optimum)
+DEMO-2022,LED strip 5 m 24 V,LIGHTING,Industrial,174.27,277.23,226.06,223.42,245.62,0.6667,44.83,259.97,0.5968,32.97,51.15,54,competitor cap
+DEMO-2022,LED strip 5 m 24 V,LIGHTING,Reseller,174.27,277.23,226.06,223.42,239.2,0.3684,18.67,223.42,0.5492,22.0,27.0,38,margin floor
+DEMO-2023,LED troffer retrofit kit,LIGHTING,Contractor,58.97,86.07,70.85,75.6,76.81,0.4524,7.03,75.6,0.4482,22.0,7.45,84,margin floor
+DEMO-2023,LED troffer retrofit kit,LIGHTING,Industrial,58.97,86.07,70.85,75.6,75.64,0.7143,11.21,81.48,0.5968,27.62,13.43,49,competitor cap
+DEMO-2023,LED troffer retrofit kit,LIGHTING,Reseller,58.97,86.07,70.85,75.6,73.34,0.42,4.69,75.6,0.2543,22.0,4.23,50,margin floor
+DEMO-2024,Emergency light unit,LIGHTING,Contractor,89.15,118.03,94.43,114.29,105.02,0.4688,5.76,114.29,0.1843,22.0,4.63,32,margin floor (above competitor cap)
+DEMO-2024,Emergency light unit,LIGHTING,Industrial,89.15,118.03,94.43,114.29,104.44,0.6667,9.54,114.29,0.5345,22.0,13.44,15,margin floor (above competitor cap)
+DEMO-2024,Emergency light unit,LIGHTING,Reseller,89.15,118.03,94.43,114.29,101.66,0.2632,1.97,114.29,0.0325,22.0,0.82,19,margin floor (above competitor cap)
+DEMO-2025,Cordless impact driver kit,TOOLS,Contractor,52.43,80.86,69.5,69.91,71.73,0.5323,8.96,70.43,0.5673,25.56,10.21,62,none (unconstrained optimum)
+DEMO-2025,Cordless impact driver kit,TOOLS,Industrial,52.43,80.86,69.5,69.91,71.28,0.6739,12.55,79.92,0.5968,34.4,16.41,46,competitor cap
+DEMO-2025,Cordless impact driver kit,TOOLS,Reseller,52.43,80.86,69.5,69.91,70.18,0.5161,8.0,69.91,0.4786,25.0,8.36,31,margin floor
+DEMO-2026,Fish tape 30 m,TOOLS,Contractor,288.22,434.4,363.65,384.29,384.02,0.5556,48.96,384.29,0.4711,25.0,45.26,27,margin floor
+DEMO-2026,Fish tape 30 m,TOOLS,Industrial,288.22,434.4,363.65,384.29,397.85,0.6364,68.48,418.2,0.5968,31.08,77.57,33,competitor cap
+DEMO-2026,Fish tape 30 m,TOOLS,Reseller,288.22,434.4,363.65,384.29,371.61,0.4706,27.56,384.29,0.2872,25.0,27.59,17,margin floor
+DEMO-2027,Digital multimeter,TOOLS,Contractor,187.43,287.79,264.21,249.91,254.99,0.6207,39.67,262.82,0.6078,28.68,45.82,116,none (unconstrained optimum)
+DEMO-2027,Digital multimeter,TOOLS,Industrial,187.43,287.79,264.21,249.91,255.55,0.8095,54.98,287.79,0.6565,34.87,65.89,63,list price
+DEMO-2027,Digital multimeter,TOOLS,Reseller,187.43,287.79,264.21,249.91,250.76,0.5882,33.49,249.91,0.7077,25.0,44.22,51,margin floor
+DEMO-2028,Conduit bender 1/2 in,TOOLS,Contractor,66.41,91.81,86.4,88.55,81.32,0.625,8.55,88.55,0.5422,25.0,12.0,16,margin floor
+DEMO-2028,Conduit bender 1/2 in,TOOLS,Industrial,66.41,91.81,86.4,88.55,86.73,0.8,16.23,91.81,0.6813,27.67,17.31,10,list price
+DEMO-2028,Conduit bender 1/2 in,TOOLS,Reseller,66.41,91.81,86.4,88.55,79.33,0.75,8.21,88.55,0.403,25.0,8.92,12,margin floor
+DEMO-2029,Cable cutter,TOOLS,Contractor,166.27,223.41,214.57,221.69,199.07,0.6508,18.76,221.69,0.5236,25.0,29.02,63,margin floor
+DEMO-2029,Cable cutter,TOOLS,Industrial,166.27,223.41,214.57,221.69,197.59,0.7609,23.14,223.41,0.7006,25.58,40.03,46,list price
+DEMO-2029,Cable cutter,TOOLS,Reseller,166.27,223.41,214.57,221.69,188.72,0.7941,14.54,221.69,0.371,25.0,20.56,34,margin floor
+DEMO-2030,Voltage tester,TOOLS,Contractor,277.05,389.44,350.06,369.4,345.69,0.6327,41.1,369.4,0.4744,25.0,43.82,98,margin floor
+DEMO-2030,Voltage tester,TOOLS,Industrial,277.05,389.44,350.06,369.4,351.67,0.6964,49.95,389.44,0.6341,28.86,71.27,56,list price
+DEMO-2030,Voltage tester,TOOLS,Reseller,277.05,389.44,350.06,369.4,335.61,0.6667,32.64,369.4,0.2922,25.0,26.99,57,margin floor
