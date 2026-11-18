@@ -6,7 +6,7 @@
 > [`data/generate_demo_data.py`](data/generate_demo_data.py) from a fixed random seed. No real company's data appears here.
 > Every CSV file starts with a `# DEMO DATA ONLY` line, and the dashboard and console output carry the same banner.
 
-**Live dashboard:** open [`docs/index.html`](docs/index.html), or enable GitHub Pages on the `docs/` folder.
+**Live dashboard:** https://nicolerekun.github.io/Pricing-Analysis/ (fictional demo data)
 
 ## The question
 
