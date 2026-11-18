@@ -3,7 +3,7 @@
     python data/generate_demo_data.py
     python run_optimizer.py
 
-Writes output/recommendations.csv and docs/data.js (for the dashboard).
+Writes output/recommendations.csv and embeds the results in docs/index.html.
 Everything is FICTIONAL demo data.
 """
 import json
@@ -54,9 +54,12 @@ def main() -> None:
                        "observed": round(v.observed_win_rate, 4)} for k, v in models.items()},
         "rows": json.loads(rec.to_json(orient="records")),
     }
-    Path("docs").mkdir(exist_ok=True)
-    Path("docs/data.js").write_text("window.PRICING_DATA = " + json.dumps(payload) + ";\n")
-    print("\nWrote output/recommendations.csv and docs/data.js")
+    # Embed the data inside the dashboard so docs/index.html works as a single file.
+    page = Path("docs/index.html")
+    html = page.read_text()
+    start, end = html.index("/*DATA-START*/") + len("/*DATA-START*/"), html.index("/*DATA-END*/")
+    page.write_text(html[:start] + "window.PRICING_DATA = " + json.dumps(payload) + ";" + html[end:])
+    print("\nWrote output/recommendations.csv and updated docs/index.html")
     print(BANNER)
 
 

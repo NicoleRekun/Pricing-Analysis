@@ -64,7 +64,7 @@ more profit.
 ```bash
 pip install -r requirements.txt
 python data/generate_demo_data.py    # builds the fictional data set
-python run_optimizer.py              # fits models, writes output/ and docs/data.js
+python run_optimizer.py              # fits models, writes output/ and the dashboard data
 pytest -q                            # 6 tests
 ```
 
